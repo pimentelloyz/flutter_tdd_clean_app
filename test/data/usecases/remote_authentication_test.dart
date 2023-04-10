@@ -9,13 +9,14 @@ class RemoteAuthentication {
   RemoteAuthentication({ required this.httpClient, required this.url });
 
   Future<void>? auth() async {
-    return await httpClient.request(url: url);
+    return await httpClient.request(url: url, method: 'post');
   }
 }
 
 abstract class HttpClient {
   Future<void>? request({ 
-    required String url, 
+    required String url,
+    required String method
   });
 }
 
@@ -29,6 +30,9 @@ void main() {
 
     await sut.auth();
 
-    verify(httpClientSpy.request(url: url));
+    verify(httpClientSpy.request(
+      url: url,
+      method: 'post'
+    ));
   });
 }
