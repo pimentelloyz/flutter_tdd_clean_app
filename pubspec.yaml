@@ -11,8 +11,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
   cupertino_icons: 
+  http: 0.12.2
 
 dev_dependencies:
   flutter_test:
