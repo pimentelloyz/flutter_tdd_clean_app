@@ -79,4 +79,13 @@ void main() {
 
     expect(account.token, accessToken);
   });
+
+  test("Should return Unexpected Error if HttpClient returns 200 with no data", () async {
+    when(httpClientSpy.request(url: anyNamed('url'), method: anyNamed('method'), body: anyNamed('body')))
+    .thenAnswer((_) async => { 'invalid_key': 'invalid_data' });
+
+    final feature = sut.auth(params: params);
+
+    await expect(feature, throwsA(DomainError.unexpected));
+  });
 }

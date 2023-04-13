@@ -16,6 +16,9 @@ class RemoteAuthentication {
     final remoteAuthenticationParams = RemoteAuthenticationParams.make(paramsFromDomain: params);
     try {
       final accountJson = await httpClient.request(url: url, method: 'post', body: remoteAuthenticationParams.toJson());
+      if (!accountJson.containsKey('accessToken')) {
+        throw HttpError.invalidData;
+      }
       return RemoteAccountModel.fromJson(accountJson).toEntity();
     } on HttpError catch(error) { 
       throw error == HttpError.unauthorized ? DomainError.invalidCredentials : DomainError.unexpected;
