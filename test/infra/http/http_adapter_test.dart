@@ -21,7 +21,7 @@ class HttpAdapter {
       'accept': 'application/json'
     };
     final jsonBody = body != null ? jsonEncode(body) : null;
-    
+
     await client.post(url, headers: headers, body: jsonBody);
   }
 }
@@ -29,12 +29,18 @@ class HttpAdapter {
 class ClientSpy extends Mock implements Client {}
 
 void main() {
+  HttpAdapter sut;
+  ClientSpy clientSpy;
+  String url;
+  
+  setUp( () {
+    url = faker.internet.httpUrl();
+    clientSpy = ClientSpy();
+    sut = HttpAdapter(client: clientSpy);
+  });
+
   group('post', () {
     test('Should call post with correct values', () async {
-      final url = faker.internet.httpUrl();
-      final clientSpy = ClientSpy();
-      final sut = HttpAdapter(client: clientSpy);
-
       await sut.request(url: url, method: 'post', body: { 'any_key': 'any_value' });
 
       verify(clientSpy.post(
@@ -48,10 +54,6 @@ void main() {
     });
 
     test('Should call post without values', () async {
-      final url = faker.internet.httpUrl();
-      final clientSpy = ClientSpy();
-      final sut = HttpAdapter(client: clientSpy);
-
       await sut.request(url: url, method: 'post');
 
       verify(clientSpy.post(
