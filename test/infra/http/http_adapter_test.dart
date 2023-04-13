@@ -13,7 +13,11 @@ class HttpAdapter {
     @required String url,
     @required String method
   }) async {
-    await client.post(url);
+    final headers = {
+      'content-type': 'application/json',
+      'accept': 'application/json'
+    };
+    await client.post(url, headers: headers);
   }
 }
 
@@ -21,14 +25,20 @@ class ClientSpy extends Mock implements Client {}
 
 void main() {
   group('post', () {
-    test('Should call post with correct url', () async {
+    test('Should call post with correct values', () async {
       final url = faker.internet.httpUrl();
       final clientSpy = ClientSpy();
       final sut = HttpAdapter(client: clientSpy);
 
       await sut.request(url: url, method: 'post');
 
-      verify(clientSpy.post(url));
+      verify(clientSpy.post(
+        url, 
+        headers: {
+          'content-type': 'application/json',
+          'accept': 'application/json'
+        })
+      );
     });
   });
 }
